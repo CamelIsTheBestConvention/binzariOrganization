@@ -10,7 +10,7 @@ const NameInput = ({ handleNameChange }) => {
   return (
     <>
       <NameInputWrapper>
-        <Input type="text" placeholder="성이름" onChange={onNameHandle} />
+        
       </NameInputWrapper>
     </>
   );
