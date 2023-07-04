@@ -30,12 +30,12 @@ const Join = () => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    type: "",
+    type: "일반회원",
     email: "",
     password: "",
     passwordCheck: "",
   });
-  console.log(form);
+  // console.log(form);
 
   // 유효성검사
   const [name, setName] = useState("");
@@ -64,13 +64,24 @@ const Join = () => {
     const currentName = form.name;
     setName(currentName);
     const nameRegExp = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,6}$/;
+    const nameRegExpMaster = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]{1,16}$/;
 
-    if (!nameRegExp.test(currentName)) {
-      setNameMessage("2-6사이 한글을 입력해주세요.");
-      setIsName(false);
-    } else {
-      setNameMessage("");
-      setIsName(true);
+    if (form.type === "일반회원") {
+      if (!nameRegExp.test(currentName)) {
+        setNameMessage("2-6사이 한글을 입력해주세요.");
+        setIsName(false);
+      } else {
+        setNameMessage("");
+        setIsName(true);
+      }
+    } else if (form.type === "사업자") {
+      if (!nameRegExpMaster.test(currentName)) {
+        setNameMessage("16자 이하의 상호명을 입력해주세요.");
+        setIsName(false);
+      } else {
+        setNameMessage("");
+        setIsName(true);
+      }
     }
   };
 
@@ -79,13 +90,24 @@ const Join = () => {
     const currentPhone = form.phone;
     setPhone(currentPhone);
     const phoneRegExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    const phoneRegExpMaster = /^[0-9]{3}-[0-9]{4}-[0-9]{4}$/;
 
-    if (!phoneRegExp.test(currentPhone)) {
-      setPhoneMessage("올바른 휴대폰 번호를 입력해주세요.");
-      setIsPhone(false);
-    } else {
-      setPhoneMessage("");
-      setIsPhone(true);
+    if (form.type === "일반회원") {
+      if (!phoneRegExp.test(currentPhone)) {
+        setPhoneMessage("올바른 휴대폰 번호를 입력해주세요.");
+        setIsPhone(false);
+      } else {
+        setPhoneMessage("");
+        setIsPhone(true);
+      }
+    } else if (form.type === "사업자") {
+      if (!phoneRegExpMaster.test(currentPhone)) {
+        setPhoneMessage("올바른 사업 번호를 입력해주세요.");
+        setIsPhone(false);
+      } else {
+        setPhoneMessage("");
+        setIsPhone(true);
+      }
     }
   };
 
@@ -143,10 +165,20 @@ const Join = () => {
   };
 
   // 타입선택
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState("normal");
 
-  const handlerClickRadioBtn = () => {
-    setIsChecked(!isChecked);
+  const [typeChange, setTypeChange] = useState(0);
+
+  const typeNormal = (e) => {
+    setForm({ ...form, type: e.target.value });
+    setTypeChange(0);
+    setIsChecked("normal");
+  };
+
+  const typeMaster = (e) => {
+    setForm({ ...form, type: e.target.value });
+    setTypeChange(1);
+    setIsChecked("master");
   };
 
   // 비번 눈깔
@@ -235,44 +267,131 @@ const Join = () => {
                   <h4>회원가입</h4>
                 </JoinTitleWrapper>
                 <JoinStep1 />
-                <NameWrapper>
-                  <NameTitleWrapper>이름</NameTitleWrapper>
-                  <Input
-                    type="text"
-                    placeholder="성이름"
-                    value={form.name}
-                    onChange={onChangeName}
-                  />
-                  <Message> {nameMessage} </Message>
-                </NameWrapper>
-                <PhoneWrapper>
-                  <PhoneTitleWrapper>휴대전화</PhoneTitleWrapper>
-                  <PhoneCountry />
-                  <PhoneInputWrapper>
-                    <Input
-                      type="text"
-                      placeholder="01012345678"
-                      value={form.phone}
-                      onChange={onChangePhone}
-                    />
-                    <SendBtn type="button" onClick={handlerSend}>
-                      인증번호 발송
-                    </SendBtn>
-                  </PhoneInputWrapper>
-                  <Message> {phoneMessage} </Message>
-                  <SendNumber
-                    style={{ display: showNumber ? "block" : "none" }}
-                  >
-                    {showNumber && <p>{randomNumber}</p>}
-                  </SendNumber>
-                  <SendCheckBtn
-                    type="button"
-                    style={{ display: showNumber ? "block" : "none" }}
-                    onClick={handlerSendRight}
-                  >
-                    인증 확인
-                  </SendCheckBtn>
-                </PhoneWrapper>
+                <TypeWrapper>
+                  <TypeTitleWrapper>유형</TypeTitleWrapper>
+                  <TypeChoiceWrapper>
+                    <TypeInputWrapper
+                      id="CheckedNormal"
+                      isChecked={isChecked === "normal"}
+                    >
+                      <TypeInput
+                        id="normal"
+                        type="radio"
+                        name="id-type-radio"
+                        value="일반회원"
+                        onChange={typeNormal}
+                      />
+                      <Label for="normal">일반</Label>
+                      <CheckImg
+                        src={Check}
+                        id="normalImg"
+                        isChecked={isChecked === "normal"}
+                      />
+                    </TypeInputWrapper>
+                    <TypeInputWrapper
+                      id="CheckedMaster"
+                      isChecked={isChecked === "master"}
+                    >
+                      <TypeInput
+                        id="master"
+                        type="radio"
+                        name="id-type-radio"
+                        value="사업자"
+                        onChange={typeMaster}
+                      />
+                      <Label for="master">사업자</Label>
+                      <CheckImg
+                        src={Check}
+                        id="masterImg"
+                        isChecked={isChecked === "master"}
+                      />
+                    </TypeInputWrapper>
+                  </TypeChoiceWrapper>
+                </TypeWrapper>
+                {typeChange === 0 && (
+                  <div>
+                    <NameWrapper>
+                      <NameTitleWrapper>이름</NameTitleWrapper>
+                      <Input
+                        type="text"
+                        placeholder="이름을 입력해주세요."
+                        value={form.name}
+                        onChange={onChangeName}
+                      />
+                      <Message> {nameMessage} </Message>
+                    </NameWrapper>
+                    <PhoneWrapper>
+                      <PhoneTitleWrapper>휴대폰 번호</PhoneTitleWrapper>
+                      <PhoneCountry />
+                      <PhoneInputWrapper>
+                        <Input
+                          type="text"
+                          placeholder="휴대폰 번호를 입력해주세요."
+                          value={form.phone}
+                          onChange={onChangePhone}
+                        />
+                        <SendBtn type="button" onClick={handlerSend}>
+                          인증번호 발송
+                        </SendBtn>
+                      </PhoneInputWrapper>
+                      <Message> {phoneMessage} </Message>
+                      <SendNumber
+                        style={{ display: showNumber ? "block" : "none" }}
+                      >
+                        {showNumber && <p>{randomNumber}</p>}
+                      </SendNumber>
+                      <SendCheckBtn
+                        type="button"
+                        style={{ display: showNumber ? "block" : "none" }}
+                        onClick={handlerSendRight}
+                      >
+                        인증 확인
+                      </SendCheckBtn>
+                    </PhoneWrapper>
+                  </div>
+                )}
+                {typeChange === 1 && (
+                  <div>
+                    <NameWrapper>
+                      <NameTitleWrapper>상호명</NameTitleWrapper>
+                      <Input
+                        type="text"
+                        placeholder="상호명을 입력해주세요."
+                        value={form.name}
+                        onChange={onChangeName}
+                      />
+                      <Message> {nameMessage} </Message>
+                    </NameWrapper>
+                    <PhoneWrapper>
+                      <PhoneTitleWrapper>사업 번호</PhoneTitleWrapper>
+                      <PhoneCountry />
+                      <PhoneInputWrapper>
+                        <Input
+                          type="text"
+                          placeholder="사업번호를 입력해주세요"
+                          value={form.phone}
+                          onChange={onChangePhone}
+                        />
+                        <SendBtn type="button" onClick={handlerSend}>
+                          인증번호 발송
+                        </SendBtn>
+                      </PhoneInputWrapper>
+                      <Message> {phoneMessage} </Message>
+                      <SendNumber
+                        style={{ display: showNumber ? "block" : "none" }}
+                      >
+                        {showNumber && <p>{randomNumber}</p>}
+                      </SendNumber>
+                      <SendCheckBtn
+                        type="button"
+                        style={{ display: showNumber ? "block" : "none" }}
+                        onClick={handlerSendRight}
+                      >
+                        인증 확인
+                      </SendCheckBtn>
+                    </PhoneWrapper>
+                  </div>
+                )}
                 <NextJoinBtn
                   onClick={handleNext}
                   disabled={!(form.name && form.phone && NextRight)}
@@ -290,74 +409,7 @@ const Join = () => {
                   <h4>회원가입</h4>
                 </JoinTitleWrapper>
                 <JoinStep2 />
-                <TypeWrapper>
-                  <TypeTitleWrapper>유형</TypeTitleWrapper>
-                  <TypeChoiceWrapper>
-                    <TypeInputWrapper
-                      id="CheckedNormal"
-                      isChecked={isChecked === "normal"}
-                      onClick={() => setIsChecked("normal")}
-                    >
-                      <TypeInput
-                        id="normal"
-                        type="radio"
-                        name="id-type-radio"
-                        value="일반"
-                        onChange={(e) =>
-                          setForm({ ...form, type: e.target.value })
-                        }
-                      />
-                      <Label for="normal">일반</Label>
-                      <CheckImg
-                        src={Check}
-                        id="normalImg"
-                        isChecked={isChecked === "normal"}
-                      />
-                    </TypeInputWrapper>
-                    <TypeInputWrapper
-                      id="CheckedMaster"
-                      isChecked={isChecked === "master"}
-                      onClick={() => setIsChecked("master")}
-                    >
-                      <TypeInput
-                        id="master"
-                        type="radio"
-                        name="id-type-radio"
-                        value="사업자"
-                        onChange={(e) =>
-                          setForm({ ...form, type: e.target.value })
-                        }
-                      />
-                      <Label for="master">사업자</Label>
-                      <CheckImg
-                        src={Check}
-                        id="masterImg"
-                        isChecked={isChecked === "master"}
-                      />
-                    </TypeInputWrapper>
-                    <TypeInputWrapper
-                      id="CheckedLaw"
-                      isChecked={isChecked === "law"}
-                      onClick={() => setIsChecked("law")}
-                    >
-                      <TypeInput
-                        id="law"
-                        type="radio"
-                        name="id-type-radio"
-                        value="법인"
-                        onChange={(e) =>
-                          setForm({ ...form, type: e.target.value })
-                        }
-                      />
-                      <Label for="law">법인</Label>
-                      <CheckImg
-                        src={Check}
-                        id="lawImg"
-                        isChecked={isChecked === "law"}
-                      />
-                    </TypeInputWrapper>
-                  </TypeChoiceWrapper>
-                </TypeWrapper>
+
                 <EmailWrapper>
                   <EmailTitleWrapper>이메일</EmailTitleWrapper>
                   <EmailInputWrapper>
@@ -714,7 +766,7 @@ const TypeChoiceWrapper = styled.article`
 `;
 
 const TypeInputWrapper = styled.article`
-  width: 30%;
+  width: 45%;
   padding-bottom: 3px;
   margin-right: 5%;
   display: flex;
@@ -740,6 +792,7 @@ const TypeInput = styled.input`
 `;
 
 const Label = styled.label`
+  width: 90%;
   cursor: pointer;
 `;
 
