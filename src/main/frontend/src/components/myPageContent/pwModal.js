@@ -1,15 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-function PwModal({ setModalOpen }) {
-  const myCurrentData = JSON.parse(window.localStorage.getItem("JoinUsers"));
-  //   const UserPw = myCurrentData[4];
-
-  const [currentPw, setCurrentPw] = useState(myCurrentData);
-
+function PwModal({ setModalOpenPw }) {
   const closeModal = () => {
-    setModalOpen(false);
-    console.log(myCurrentData);
+    setModalOpenPw(false);
   };
 
   return (

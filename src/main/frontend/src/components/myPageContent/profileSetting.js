@@ -1,26 +1,37 @@
 import styled from "styled-components";
 import { useState } from "react";
 import PwModal from "./pwModal";
+import PhoneModal from "./phoneModal";
 
-const ProfileSetting = () => {
+const ProfileSetting = (props) => {
   // 모달창 노출 여부 state
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenPw, setModalOpenPw] = useState(false);
+  const [modalOpenPhone, setModalOpenPhone] = useState(false);
+  const [toggle, setToggle] = useState(props.toggle);
 
   // 모달창 노출
-  const showModal = () => {
-    setModalOpen(true);
+  const showModalPw = () => {
+    setModalOpenPw(true);
+  };
+
+  const showModalPhone = () => {
+    setModalOpenPhone(true);
   };
 
   return (
     <>
       <ProfileSettingWrapper>
-        <ProfileSettingType>개인 계정</ProfileSettingType>
-        <ProfileSettingUl>
+        <ProfileSettingUl style={{ display: toggle ? "block" : "none" }}>
           <ProfileSettingLi>프로필 이미지 변경</ProfileSettingLi>
-          <ProfileSettingLi onClick={showModal}>비밀번호 변경</ProfileSettingLi>
-          <ProfileSettingLi>핸드폰 번호 변경</ProfileSettingLi>
+          <ProfileSettingLi onClick={showModalPw}>
+            비밀번호 변경
+          </ProfileSettingLi>
+          <ProfileSettingLi onClick={showModalPhone}>
+            핸드폰 번호 변경
+          </ProfileSettingLi>
         </ProfileSettingUl>
-        {modalOpen && <PwModal setModalOpen={setModalOpen} />}
+        {modalOpenPw && <PwModal setModalOpenPw={setModalOpenPw} />}
+        {modalOpenPhone && <PhoneModal setModalOpenPhone={setModalOpenPhone} />}
       </ProfileSettingWrapper>
     </>
   );
@@ -28,13 +39,8 @@ const ProfileSetting = () => {
 export default ProfileSetting;
 
 const ProfileSettingWrapper = styled.div`
+  margin-top: 0.5rem;
   margin-bottom: 1.3em;
-`;
-
-const ProfileSettingType = styled.p`
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 0.4em;
 `;
 
 const ProfileSettingUl = styled.ul`
@@ -44,7 +50,8 @@ const ProfileSettingUl = styled.ul`
 `;
 
 const ProfileSettingLi = styled.li`
-  margin-bottom: 0.2em;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
 `;

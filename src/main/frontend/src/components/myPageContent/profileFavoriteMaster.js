@@ -2,21 +2,20 @@ import styled from "styled-components";
 import BusinessProfile from "../../images/myPageImages/businessProfile.png";
 import Danggu from "../../images/myPageImages/danggu.jpg";
 
-const ProfileFavorite = () => {
+const ProfileFavoriteMaster = () => {
   return (
     <>
       <FavoriteStoreWrapper>
-        <FavoriteStoreTitle>단골 매장 목록</FavoriteStoreTitle>
+        <FavoriteStoreTitle>단골 손님 목록</FavoriteStoreTitle>
         <FavoriteStoreUl>
           <FavoriteStoreLi>
             <FavoriteStoreImgWrapper>
               <BusinessProfileImg src={BusinessProfile} />
             </FavoriteStoreImgWrapper>
             <FavoriteStoreInfo>
-              <FavoriteStoreInfoTitle>역삼당구장</FavoriteStoreInfoTitle>
-              <FavoriteStoreInfoAddress>
-                서울특별시 금천구 가산동 디지털로123
-              </FavoriteStoreInfoAddress>
+              <FavoriteStoreInfoTitle>문성준</FavoriteStoreInfoTitle>
+              <FavoriteStoreInfoAddress>msj1108</FavoriteStoreInfoAddress>
+              <FavoriteStoreInfoAddress>010-1234-1234</FavoriteStoreInfoAddress>
             </FavoriteStoreInfo>
           </FavoriteStoreLi>
           <FavoriteStoreLi>
@@ -24,10 +23,9 @@ const ProfileFavorite = () => {
               <BusinessProfileImg src={Danggu} />
             </FavoriteStoreImgWrapper>
             <FavoriteStoreInfo>
-              <FavoriteStoreInfoTitle>역삼당구장</FavoriteStoreInfoTitle>
-              <FavoriteStoreInfoAddress>
-                서울특별시 금천구 가산동 디지털로123
-              </FavoriteStoreInfoAddress>
+              <FavoriteStoreInfoTitle>고진혁</FavoriteStoreInfoTitle>
+              <FavoriteStoreInfoAddress>010-1111-1111</FavoriteStoreInfoAddress>
+              <FavoriteStoreInfoAddress>010-1111-1111</FavoriteStoreInfoAddress>
             </FavoriteStoreInfo>
           </FavoriteStoreLi>
         </FavoriteStoreUl>
@@ -35,7 +33,7 @@ const ProfileFavorite = () => {
     </>
   );
 };
-export default ProfileFavorite;
+export default ProfileFavoriteMaster;
 
 const FavoriteStoreWrapper = styled.div`
   margin-bottom: 1.3em;
